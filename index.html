@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <title>Pet Food Tracker</title>
+        
+        <link href="https://fonts.googleapis.com/css?family=PT+Sans|Roboto&display=swap" rel="stylesheet">
+        <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+        <script src="https://momentjs.com/downloads/moment.js"></script>
+
+        <style>
+            html, body { 
+                margin: 0; 
+                padding: 0;
+            }
+            .container {
+                position: fixed;
+                top: calc(50% - 125px);
+                left: calc(50% - 150px);
+            }
+            .content {
+                height: 250px;
+                width: 300px;
+            }
+            .image-container {
+
+                display: flex;
+                justify-content: center;
+
+            }
+            #message-container {
+                flex: 1;
+                text-align: center;
+
+                font-family: 'PT Sans', sans-serif;
+                font-size: 28px;
+                color: whitesmoke;
+                font-weight: bold;
+            }
+            #submessage-container {
+                flex: 1;
+                text-align: center;
+
+                font-family: 'Roboto', sans-serif;
+                font-size: 14px;
+                color: gainsboro;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+        <div class="content">
+            <div class="image-container">
+                <img 
+                    id="image" height="200px" width="170px"
+                />
+            </div>
+            <div id="message-container">
+            </div>
+            <div id="submessage-container">
+            </div>
+        </div>
+        </div>
+    </body>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyDOMViQB39yZhV0YpvSCh1GDimjk8j37M0",
+            authDomain: "pettracker-9a7b5.firebaseapp.com",
+            databaseURL: "https://pettracker-9a7b5.firebaseio.com",
+            projectId: "pettracker-9a7b5",
+            storageBucket: "pettracker-9a7b5.appspot.com",
+            messagingSenderId: "481551946676",
+            appId: "1:481551946676:web:2643a69740c55023"
+        };
+                
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <script>
+        
+        // UI Accessors
+        function setImageUrl(url) {
+            document.getElementById("image").src = url;
+        }
+        function setMessage(message) {
+            document.getElementById("message-container").innerText = message;
+        }
+        function setSubmessage(submessage) {
+            document.getElementById("submessage-container").innerText = submessage;
+        }
+        function setBackgroundColor(color) {
+            document.body.style.backgroundColor = color;
+        }
+        
+        // Logic functions
+        function shorttime() {
+            return moment().format('MMMM Do YYYY (a)'); // June 16th 2019, pm
+        }
+
+        function longtime() {
+            return moment().format('MMMM Do YYYY, h:mm:ss a'); // June 16th 2019, 2:01:21 pm
+        }
+
+        function tod() {
+            return (moment().format('a') == 'am') ? 'morning' : 'afternoon';
+        }
+
+        // Config Functions
+        function image(fed) {
+            return fed ?  
+                "file:///Users/brendanmanning/Downloads/sleepy-cat.png" :
+                "file:///Users/brendanmanning/Downloads/hungry-cat.png"
+        }
+
+        function message(fed) {
+            return fed ? "I'm full!" : "Feed me!"
+        } 
+
+        function submessage(fed) {
+            return fed ? "You fed me this " + tod() : "I haven't been fed this " + tod();
+        }
+
+        function backgroundColor(fed) {
+            return fed ? '#189ad3' : '#8D021F'
+        }
+
+        // Get the state
+        window.onload = function() {
+            firebase.database().ref(shorttime()).on('value', function(snapshot) {
+                var fed = (snapshot.val() && snapshot.val().done) || false;
+            
+                // Configure UI
+                setImageUrl(image(fed));
+                setMessage(message(fed));
+                setSubmessage(submessage(fed));
+                setBackgroundColor(backgroundColor(fed));
+        }); 
+
+    }
+     </script>
+</html>
