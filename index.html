@@ -6,6 +6,7 @@
         <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
         <script src="https://momentjs.com/downloads/moment.js"></script>
+        <script src="https://momentjs.com/downloads/moment-timezone-with-data-10-year-range.min.js"></script>
 
         <style>
             html, body { 
@@ -92,11 +93,11 @@
         
         // Logic functions
         function shorttime() {
-            return moment().format('MMMM Do YYYY (a)'); // June 16th 2019, pm
+            return moment().tz("America/New_York").format('MMMM Do YYYY (a)'); // June 16th 2019, pm
         }
 
         function longtime() {
-            return moment().format('MMMM Do YYYY, h:mm:ss a'); // June 16th 2019, 2:01:21 pm
+            return moment().tz("America/New_York").format('MMMM Do YYYY, h:mm:ss a'); // June 16th 2019, 2:01:21 pm
         }
 
         function tod() {
