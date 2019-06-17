@@ -124,6 +124,7 @@
 
         // Get the state
         window.onload = function() {
+            moment.tz.setDefault("America/New_York");
             firebase.database().ref(shorttime()).on('value', function(snapshot) {
                 var fed = (snapshot.val() && snapshot.val().done) || false;
             
